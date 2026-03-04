@@ -2,6 +2,28 @@ stages:
   data_ingestion:
     cmd: python src/data_ingestion.py
     deps:
-    - src/data_ingestion.py
+      - src/data_ingestion.py
     outs:
-    - data/raw
+      - data/raw/features.parquet
+      - data/raw/targets.parquet
+
+  validate:
+    cmd: python -m src.validate
+    deps:
+      - src/validate.py
+      - data/raw/features.parquet
+      - data/raw/targets.parquet
+    outs:
+      - artifacts/validation_report.json
+
+  features:
+    cmd: python -m src.features
+    deps:
+      - src/features.py
+      - data/raw/features.parquet
+      - data/raw/targets.parquet
+    outs:
+      - data/processed/features.parquet
+      - data/processed/targets.parquet
+      - artifacts/scaler.joblib
+      - artifacts/encoder.joblib

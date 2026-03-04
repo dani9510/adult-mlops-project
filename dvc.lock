@@ -5,11 +5,66 @@ stages:
     deps:
     - path: src/data_ingestion.py
       hash: md5
-      md5: d5df5422ca2240c1e606453bd0750ed6
-      size: 601
+      md5: b89b794e5538e8cd113058f1f35f68e4
+      size: 861
     outs:
-    - path: data/raw
+    - path: data/raw/features.parquet
       hash: md5
-      md5: a11b838e4494b044a16ddaa91d8cd4da.dir
-      size: 5291600
-      nfiles: 2
+      md5: 804bf0261ef1003b3e77bb5d37b45c5f
+      size: 514655
+    - path: data/raw/targets.parquet
+      hash: md5
+      md5: 60bdd7ebaa75c3d0a52aaf3e1e0d6ffc
+      size: 11195
+  validate:
+    cmd: python -m src.validate
+    deps:
+    - path: data/raw/features.parquet
+      hash: md5
+      md5: 804bf0261ef1003b3e77bb5d37b45c5f
+      size: 514655
+    - path: data/raw/targets.parquet
+      hash: md5
+      md5: 60bdd7ebaa75c3d0a52aaf3e1e0d6ffc
+      size: 11195
+    - path: src/validate.py
+      hash: md5
+      md5: bdf0abe1693099fa3002dbcb09726e36
+      size: 5725
+    outs:
+    - path: artifacts/validation_report.json
+      hash: md5
+      md5: 2ffc27f3b6c931d637e493272ba7f60e
+      size: 1457
+  features:
+    cmd: python -m src.features
+    deps:
+    - path: data/raw/features.parquet
+      hash: md5
+      md5: 804bf0261ef1003b3e77bb5d37b45c5f
+      size: 514655
+    - path: data/raw/targets.parquet
+      hash: md5
+      md5: 60bdd7ebaa75c3d0a52aaf3e1e0d6ffc
+      size: 11195
+    - path: src/features.py
+      hash: md5
+      md5: 2e1d331ce40ed4066790ad091953fd9b
+      size: 2665
+    outs:
+    - path: artifacts/encoder.joblib
+      hash: md5
+      md5: 63eca7c6d059bfde79a018846260387a
+      size: 3661
+    - path: artifacts/scaler.joblib
+      hash: md5
+      md5: 6f66835376f95783e0779806f957d3a8
+      size: 1047
+    - path: data/processed/features.parquet
+      hash: md5
+      md5: 661da7b6f16590cef1a78dd9c4c75bfb
+      size: 604409
+    - path: data/processed/targets.parquet
+      hash: md5
+      md5: 6a1ae893d05a81ba0f035c996e1765d7
+      size: 8315
